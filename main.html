@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Work Hours Calculator</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            transition: background 0.5s ease;
+        }
+        .container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 2px dashed;
+            transition: background 0.5s ease, border-color 0.5s ease;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            transition: color 0.5s ease;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            font-weight: 500;
+            transition: color 0.5s ease;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #fff;
+            transition: border-color 0.5s ease;
+        }
+        button {
+            background: linear-gradient(90deg, #555, #888);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: color 0.5s ease;
+        }
+        .footer {
+            font-size: 0.9em;
+            opacity: 0.85;
+            font-style: italic;
+            margin-top: 10px;
+            transition: color 0.5s ease;
+        }
+        .toggle-btn {
+            margin-bottom: 20px;
+            background: #333;
+            color: #fff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+        .toggle-btn:hover {
+            background: #555;
+        }
+
+        /* Girly theme */
+        .girly {
+            background: linear-gradient(135deg, #FFC1E3, #FFDEE9);
+        }
+        .girly .container {
+            background: #fff0f6;
+            border-color: #ffb6c1;
+        }
+        .girly h1, .girly label, .girly #result, .girly .footer {
+            color: #d63384;
+        }
+        .girly input {
+            border-color: #f8bbd0;
+        }
+        .girly button {
+            background: linear-gradient(90deg, #ff69b4, #ff85c1);
+        }
+
+        /* Boyish theme */
+        .boyish {
+            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+        }
+        .boyish .container {
+            background: #e0f7fa;
+            border-color: #4dd0e1;
+        }
+        .boyish h1, .boyish label, .boyish #result, .boyish .footer {
+            color: #006064;
+        }
+        .boyish input {
+            border-color: #4dd0e1;
+        }
+        .boyish button {
+            background: linear-gradient(90deg, #0288d1, #26c6da);
+        }
+    </style>
+</head>
+<body class="girly">
+
+    <button class="toggle-btn" onclick="toggleTheme()">🌟 Switch Theme 🌟</button>
+
+    <div class="container">
+        <h1>Work Hours Calculator</h1>
+
+        <label for="startTime">Start Time (24h format):</label>
+        <input type="time" id="startTime">
+
+        <label for="breakMinutes">Break Duration (minutes):</label>
+        <input type="number" id="breakMinutes" value="0" min="0">
+
+        <label for="workHours">Work Duration (hours):</label>
+        <input type="number" id="workHours" value="8" min="0">
+
+        <label for="workMinutes">Work Duration (minutes):</label>
+        <input type="number" id="workMinutes" value="20" min="0">
+
+        <button onclick="calculateLeavingTime()">✨ Calculate ✨</button>
+
+        <div id="result"></div>
+    </div>
+
+    <div class="footer">
+        🌸 Made with love by Steffy 🌸
+    </div>
+
+    <script>
+        function calculateLeavingTime() {
+            const startTime = document.getElementById('startTime').value;
+            const breakMinutes = parseInt(document.getElementById('breakMinutes').value) || 0;
+            const workHours = parseInt(document.getElementById('workHours').value) || 0;
+            const workMinutes = parseInt(document.getElementById('workMinutes').value) || 0;
+
+            if (!startTime) {
+                document.getElementById('result').innerText = "⏰ Please enter a start time!";
+                return;
+            }
+
+            const [hours, minutes] = startTime.split(':').map(Number);
+            let startDate = new Date();
+            startDate.setHours(hours, minutes, 0, 0);
+
+            const totalWorkMinutes = (workHours * 60) + workMinutes + breakMinutes;
+            const leavingDate = new Date(startDate.getTime() + totalWorkMinutes * 60000);
+
+            const leaveHours = leavingDate.getHours().toString().padStart(2, '0');
+            const leaveMinutes = leavingDate.getMinutes().toString().padStart(2, '0');
+
+            document.getElementById('result').innerText = `🎀 You can leave at: ${leaveHours}:${leaveMinutes} 🎀`;
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('girly')) {
+                body.classList.remove('girly');
+                body.classList.add('boyish');
+            } else {
+                body.classList.remove('boyish');
+                body.classList.add('girly');
+            }
+        }
+    </script>
+
+</body>
+</html>
